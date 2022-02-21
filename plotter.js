@@ -20,6 +20,7 @@ function draw(config, funcs) {
     var canvas = document.getElementById("canvas");
     if (null==canvas || !canvas.getContext) return;
     var axes={}, ctx=canvas.getContext("2d");
+    
     //==========================================================================
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
