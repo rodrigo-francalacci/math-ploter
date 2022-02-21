@@ -2,7 +2,7 @@
         
 //==============================================================================   
 //-----------------------------inicia o script---------------------------------
-//imputs são: X mínimo e máximo da escala, Y mínimo e máximo da escala,
+//inputs são: X mínimo e máximo da escala, Y mínimo e máximo da escala,
 // se vai desenhar os números no grid, ou se vai desenhar os números do fim e início das funções
 function draw(config, funcs) {
     

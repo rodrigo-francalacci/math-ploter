@@ -1,11 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head><title>Canvas code example</title>
+<link rel="stylesheet" href="page.css">
 <script src = "plotter.js" type = "text/javascript"></script>
 </head>
 <body>
-<button onclick=execGraph()>Desenhar gráfico</button>
-<canvas id="canvas" width="500" height="500"></canvas>
+
+<header>Welcome! Plot your functions here!</header>
+
+<main>
+
+    <div class="core">
+
+        <div class="setup">
+            <p>Overall Settings</p>
+            <div><input type="number" id="XMIN" value="-5"> <label>lower x-axis limit</label></div>
+            <div><input type="number" id="XMAX" value="30"> <label>upper x-axis limit</label></div>
+            <div><input type="text" id="XLABEL" value="Q (cal)"> <label>x-axis label</label></div>
+            <div><input type="text" id="XLABELPOS" value="12"> <label>position of the x-axis label</label></div>
+            
+            <div><input type="number" id="YMIN" value="-15"> <label>lower y-axis limit</label></div>
+            <div><input type="number" id="YMAX" value="50"> <label>upper y-axis limit</label></div>
+            <div><input type="text" id="YLABEL" value="T (°C)"> <label>y-axis label</label></div>
+    
+            <div><input type="number" id="NSUBSCALE" value="1"><label>number of scale subdivisions</label></div>
+            <div><input type="checkbox" id="FULLSCALE" checked="true"><label>number the entire scale</label></div>
+            <div><input type="checkbox" id="ONLYPAIRS" ><label>number only the defined point pairs</label></div>
+    
+        </div>
+    
+        <div>
+            <canvas id="canvas" width="500" height="500"></canvas>
+        </div>
+
+    </div>
+
+    
+
+    <button onclick=execGraph()>Desenhar gráfico</button>
+
+</main>
+    
+
+
 </body>
 
 <script>
@@ -21,16 +58,16 @@ function execGraph(){
     
 //------------CONFIGURAÇÕES GERAIS-----------------
     
-    config.Xmin = -5; // o menor limite para o eixo X do gráfico
-    config.Xmax = 30; // o maior limite para o eixo X do gráfico
-    config.Ymin = -15; // o menor limite para o eixo Y do gráfico
-    config.Ymax = 50; // o maior limite para o eixo Y do gráfico
-    config.ScaleDivisions = 1; // define o intervalo entre as divisões da escala
-    config.No_grid = true; // numerar todas as divisões do gráfico ?
-    config.No_pares = false; // numerar os pares de pontos predefinidos ?
-    config.rotuloX = "Q (cal)";
-    config.rotuloXdes = 12; // deslocamento horizontal para o rótuloX
-    config.rotuloY = "T (°C)";
+    config.Xmin = document.getElementById("XMIN").value; //-5; // o menor limite para o eixo X do gráfico
+    config.Xmax = document.getElementById("XMAX").value; //30; // o maior limite para o eixo X do gráfico
+    config.Ymin = document.getElementById("YMIN").value; //-15; // o menor limite para o eixo Y do gráfico
+    config.Ymax = document.getElementById("YMAX").value; //50; // o maior limite para o eixo Y do gráfico
+    config.ScaleDivisions = document.getElementById("NSUBSCALE").value //1; // define o intervalo entre as divisões da escala
+    config.No_grid = document.getElementById("FULLSCALE").checked //true; // numerar todas as divisões do gráfico ?
+    config.No_pares = document.getElementById("ONLYPAIRS").checked //false; // numerar os pares de pontos predefinidos ?
+    config.rotuloX = document.getElementById("XLABEL").value //"Q (cal)";
+    config.rotuloXdes = document.getElementById("XLABELPOS").value //12; // deslocamento horizontal para o rótuloX
+    config.rotuloY = document.getElementById("YLABEL").value //"T (°C)";
     config.font = "18px Arial";
     
 //-------------------FUNÇÕES-----------------------    
