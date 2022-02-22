@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial=scale=1, shrik-to-fit=no">    
+    <script src="https://unpkg.com/mathjs@9.3.0/lib/browser/math.js"></script>
+    <script src = "plotter.js" type = "text/javascript"></script>
+      
+    <style>
+        body {
+            margin-top: 75px;
+            margin-left: 100px;
+            margin-right: 100px;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+        
+        
+        .questao{
+            margin-top: 75px;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+        
+        .intervalos{
+            background-color: beige;
+            border-style: solid;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            align-content: space-between;
+        }
+        .intervalos div{
+            margin: 30px;
+        }
+        
+        span {
+            font-weight: bold;
+        }
+        
+        .resposta{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            align-content: space-between;
+            
+        }
+        
+        .resposta div{
+            margin: 30px;
+        }
+        
+      </style>
+      
+      
+  </head>
+  <body>
+
+
+<!--------------------------------------------------------------------------------------
+--------------------------------------DADOS DE ENTRADA----------------------------------
+--------------------------------------------------------------------------------------->
+
+    <div class="intervalos">
+        
+    <div  class="intervalos-v">
+        Velocidade V1 (km/h)
+    <br><input id="V1_min" type="number" value="20" min="1"> até 
+    <input id="V1_max" type="number" value="120" min="1"><br>
+    OBS: <br><br>
+        
+        Velocidade V2 = repouso = 0km/h
+    <br><br>
+        
+        Velocidade V3 (km/h)
+    <br><input id="V3_min" type="number" value="20"> até
+    <input id="V3_max" type="number" value="120"><br>
+    OBS: <br><br>
+        
+        </div>
+        
+    <div class="intervalos-t">
+        
+        Tempo T1 (horas)
+        <br><input id="T1_min" type="number" value="0.1" min="1"> até 
+        <input id="T1_max" type="number" value="3" min=1><br>
+        OBS: <br><br>
+    
+    
+        
+        Tempo T2 (horas)
+        <br><input id="T2_min" type="number" value="0.1" min="1"> até 
+        <input id="T2_max" type="number" value="3" min=1><br>
+        OBS: <br><br>
+        
+    
+        
+        Tempo T3 (horas)
+        <br><input id="T3_min" type="number" value="0.1" min="1"> até 
+        <input id="T3_max" type="number" value="3" min=1><br>
+        OBS: <br><br>
+        
+        </div>
+    
+          
+    </div>
+    
+    <button type="button" onclick="gerarQuestao()">gerar variação</button>
+
+    
+    
+
+<!--------------------------------------------------------------------------------------
+--------------------------------------ENUNCIADO DA QUESTÃO------------------------------
+--------------------------------------------------------------------------------------->
+
+<div class="questao">Uma família viaja de carro com velocidade escalar constante de <span id="V1"></span>km/h, durante <span id="T1"></span>. Após parar em um posto de gasolina por <span id="T2"></span>, continua sua viagem por mais <span id="T3"></span> com velocidade escalar constante de <span id="V3"></span>km/h. Esboce o gráfico da posição em função do tempo e calcule a velocidade escalar média do carro durante toda a viagem.</div>
+    
+    
+<br>
+<br>
+
+<div class="resposta">
+   <div><canvas id="canvas" width="300" height="300"></canvas></div>
+<div><span id="REP"></span></div>
+ 
+      </div>
+
+      
+
+<!--------------------RESOLUÇÃO------------------------------------------------------->
+<script>
+function gerarQuestao(){
+    
+     
+
+    var n;
+    for (n = 0; n < 10000; n++) {
+
+        //PEGAR LIMITES DEFINIDOS PELO USUÁRIO
+        var V1_min = Number(document.getElementById("V1_min").value);
+        var V1_max = Number(document.getElementById("V1_max").value);
+        var V3_min = Number(document.getElementById("V3_min").value);
+        var V3_max = Number(document.getElementById("V3_max").value);
+        
+        var T1_min = Number(document.getElementById("T1_min").value);
+        var T1_max = Number(document.getElementById("T1_max").value);
+        var T2_min = Number(document.getElementById("T2_min").value);
+        var T2_max = Number(document.getElementById("T2_max").value);
+        var T3_min = Number(document.getElementById("T3_min").value);
+        var T3_max = Number(document.getElementById("T3_max").value);
+        
+        //GERAR VALORES DE ENUNCIADO
+        var V1 = getRndInteger(V1_min, V1_max);
+        var V2 = 0;
+        var V3 = getRndInteger(V3_min, V3_max);
+        var T1 = getRndInteger(T1_min*10, T1_max*10)
+        T1 = Math.round(T1)/10;
+        var T2 = getRndInteger(T2_min*10, T2_max*10);
+        T2 = Math.round(T2)/10;
+        var T3 = getRndInteger(T3_min*10, T3_max*10);
+        T3 = Math.round(T3)/10;
+
+    
+        //INICIAR A RESOLUÇÃO DA QUESTÃO
+        // item A
+        var D1 = V1*T1;
+        if (Number.isInteger(D1*10) == false){continue;}//condição 1
+        
+        var D2 = 0;
+        
+        var D3 = V3*T3;
+        if (Number.isInteger(D3*10) == false){continue;}//condição 3
+        
+        var Dt = D1+D2+D3;
+        var Tt = T1+T2+T3;
+        
+        var Vm = Dt/Tt;
+        if (Number.isInteger(Vm*10) == false){continue;}//condição 4
+        
+        
+        var rep = "ΔS = " + Dt + "km, ΔT = " + Tt + "h, e Vm = " + Vm + "km/h";
+
+        //-------insere os valores-------------
+        document.getElementById("V1").innerHTML = V1;
+        document.getElementById("V3").innerHTML = V3;
+        document.getElementById("T1").innerHTML = math.floor(T1) + "h " + Math.round((T1-math.floor(T1))*60) + "min ";
+        document.getElementById("T2").innerHTML = math.floor(T2) + "h " + Math.round((T2-math.floor(T2))*60) + "min ";
+        document.getElementById("T3").innerHTML = math.floor(T3) + "h " + Math.round((T3-math.floor(T3))*60) + "min ";
+        
+        
+        rep = "convertendo em horas teremos: <br>";
+        rep = rep + "T1=" + T1 + "horas <br>";
+        rep = rep + "T2=" + T2 + "horas <br>";
+        rep = rep + "T3=" + T3 + "horas <br><br>";
+        rep = rep + "calculando as distâncias em cada etapa <br>";
+        rep = rep + "D1=" + T1 + "*" + V1 + "=" + D1 + "km <br>";
+        rep = rep + "D2=" + T2 + "*" + V2 + "=" + D2 + "km <br>";
+        rep = rep + "D3=" + T3 + "*" + V3 + "=" + D3 + "km <br><br>";
+        rep = rep + "calculando as Vm total: <br>";
+        rep = rep +  "Vm=(D1+D2+D3)/(T1+T2+T3) = " + Dt + "/" + Tt + " = " + Vm + "km/h";
+        
+        
+        document.getElementById("REP").innerHTML = rep;
+        
+ 
+//==========================================================================
+//+++++++++++++++++++++++++++PAINEL GRÁFICO DO USUÁRIO++++++++++++++++++++++
+//==========================================================================  
+        
+    var config={};
+    var funcs=[];
+    
+//------------CONFIGURAÇÕES GERAIS-----------------
+    
+    config.Xmin = 0; // o menor limite para o eixo X do gráfico
+    config.Xmax = 1.05*Tt; // o maior limite para o eixo X do gráfico
+    config.Ymin = 0; // o menor limite para o eixo Y do gráfico
+    config.Ymax = 1.05*Dt; // o maior limite para o eixo Y do gráfico
+    config.ScaleDivisions = 1; // define o intervalo entre as divisões da escala
+    config.r = 7; //distância entre numeros e eixo vertical
+    config.No_grid = false; // numerar todas as divisões do gráfico ?
+    config.No_pares = true; // numerar os pares de pontos predefinidos ?
+    config.rotuloX = "t(h)";
+    config.rotuloXdes = 10; // deslocamento horizontal para o rótuloX
+    config.rotuloY = "s(km)";
+    config.font = "17px Arial";
+    config.axisWidth = 2; //espessura da linha dos eixos
+    
+//-------------------FUNÇÕES-----------------------    
+//função 1-----------------------------------------
+    var func1 = {
+        fun: function f(t) {return V1*t;},
+        xmin: 0, xmax: T1, lineColor: "red", espessura: 2
+    };
+    funcs[1] = func1;
+
+//função 2-----------------------------------------
+    var func2 = {
+        fun: function f(t) {return D1;},
+        xmin: T1, xmax: T1+T2, lineColor: "red", espessura: 2
+    };
+    funcs[2] = func2;
+
+//função 3-----------------------------------------
+    var func3 = {
+        fun: function f(t) {return D1+(V3*(t-T2-T1));},
+        xmin: T1+T2, xmax: T1+T2+T3, lineColor: "red", espessura: 2
+    };
+    funcs[3] = func3;
+        
+//------------------PARES DE PLOT------------------
+    funcs[0] = [
+        [T1,D1],
+        [T1+T2,D1],
+        [T1+T2+T3,(D1+(T3*V3))]
+    ];
+    
+    draw(config, funcs);   
+
+
+    
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        
+        
+        break;
+        
+        }
+        
+
+            
+    }
+    
+
+
+
+</script>
+
+
+
+  </body>
+    
+      
+    
+<script>
+
+//-------------------------------------------------------------------------------------
+//--------------------------------------FUNÇÕES MATEMÁTICAS----------------------------
+//-------------------------------------------------------------------------------------
+
+//gera um número aleaório inteiro entre dois números
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+//converte decimal para fração
+function decimalTofraction(decimal) {
+	
+	
+	// Enter a decimal to convert to a fraction
+	//var decimal = "1.75";
+	
+	// Split the decimal
+	var decimalArray = decimal.split(".");
+	
+	var leftDecimalPart = decimalArray[0];
+	var rightDecimalPart = decimalArray[1];
+	
+	// Save decimal part only for later use
+	var decimalOnly = "0." + rightDecimalPart;
+	
+	// Find the decimal multiplier
+	var multiplier = "1";
+	
+	for (var i = 0; i < rightDecimalPart.length; i++) {
+		multiplier += "0";
+	}
+	
+	// Create numerator by multiplying the multiplier and decimal part together
+	var numerator = Number(multiplier) * Number(decimalOnly);
+	
+	var denominator = multiplier;
+	
+	// Find the highest common factor for the numerator and denominator
+	var factor = highestCommonFactor(numerator, denominator);
+	
+	// Simplify the fraction by dividing the numerator and denominator by the factor
+	var numerator = Number(numerator) / Number(factor);
+	var denominator = Number(denominator) / Number(factor);
+
+	// Output as a mixed number fraction (depending on input)
+	var mixedNumber = leftDecimalPart + " " + numerator + "/" + denominator;
+	
+	// Output as a proper fraction or improper fraction (depending on input)
+	var numerator = numerator + (leftDecimalPart * denominator);
+	var fraction = numerator + "/" + denominator;
+
+	// Display solution
+  return fraction;
+}
+
+	// Finds the highest common factor of 2 numbers
+	function highestCommonFactor(numerator, denominator) {
+    var factor;
+		for (factor = numerator; factor > 0; factor--) {
+			if ((numerator % factor == 0) && (denominator % factor == 0)) {
+				return factor;
+			}
+		}
+	}
+
+
+
+</script>
+
+
+
+</html>
