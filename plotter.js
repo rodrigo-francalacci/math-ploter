@@ -25,10 +25,12 @@ function draw(config, funcs) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     //-----------------------------prepara escala-------------------------------
+    
+    
     var p = gcd(Xmax-Xmin,Ymax-Ymin); // em quantas partes vai dividir os grids
     p = p*config.ScaleDivisions;
     var Ux = (Xmax-Xmin)/p; //fator de multiplicação do eixo X
-    var Uy = ((Ymax-Ymin)/p); //fator de multiplicação do eixo Y
+    var Uy = (Ymax-Ymin)/p; //fator de multiplicação do eixo Y
     //==========================================================================
     
      
@@ -361,3 +363,58 @@ return gcd(b, a % b);
 };
 //==============================================================================
         
+//----------------------------optimiza subdivisões--------------------------
+function optmizeLimits(nDiv, Xmax, Ymax, Xmin, Ymin){
+  
+  var x=0;
+  var increment = 1;
+  var gcd_ = gcd(Xmax-Xmin,Ymax-Ymin);
+  var nDivMin = 3;
+
+while(Number.isInteger(gcd_) != true || gcd_ < nDivMin){
+
+switch(x){
+
+  case 0:
+    if(increment>1){
+    Ymin=Ymin+increment-1;
+    };
+    Xmax = Xmax+increment;
+    x=1;
+    break;
+
+  case 1:
+    Xmax = Xmax-increment;
+    Xmin = Xmin-increment;
+    x=2;
+    break;
+
+  case 2:
+    Xmin = Xmin+increment;
+    Ymax=Ymax+increment;
+    x=3;
+    break;
+
+  case 3:
+    Ymax=Ymax-increment;
+    Ymin=Ymin-increment;
+    x=0;
+    increment = increment + 1;
+
+}
+gcd_ = gcd(Xmax-Xmin,Ymax-Ymin);
+if(increment>5){
+  nDivMin = nDivMin +1;
+  increment = 1;
+}
+}
+
+return {
+  "Xmax": Xmax,
+  "Xmin": Xmin,
+  "Ymax": Ymax,
+  "Ymin": Ymin
+}
+
+
+}

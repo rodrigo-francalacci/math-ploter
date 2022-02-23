@@ -23,7 +23,8 @@
             <div><input type="number" id="YMAX" value="50"> <label>upper y-axis limit</label></div>
             <div><input type="text" id="YLABEL" value="T (°C)"> <label>y-axis label</label></div>
     
-            <div><input type="number" id="NSUBSCALE" value="1"><label>number of scale subdivisions</label></div>
+            
+            <div><input type="number" id="NSUBSCALE" value="1" min="1"><label>number of scale subdivisions</label></div>
             <div><input type="number" id="FSIZE" value="18"> <label>font size</label></div>
 
             <div><input type="checkbox" id="FULLSCALE" checked="true"><label>full scale</label></div>
@@ -125,6 +126,7 @@ function execGraph(){
     config.Xmax = document.getElementById("XMAX").value; //30; // o maior limite para o eixo X do gráfico
     config.Ymin = document.getElementById("YMIN").value; //-15; // o menor limite para o eixo Y do gráfico
     config.Ymax = document.getElementById("YMAX").value; //50; // o maior limite para o eixo Y do gráfico
+   
     config.ScaleDivisions = document.getElementById("NSUBSCALE").value //1; // define o intervalo entre as divisões da escala
     config.No_grid = document.getElementById("FULLSCALE").checked //true; // numerar todas as divisões do gráfico ?
     config.No_pares = document.getElementById("ONLYPAIRS").checked //false; // numerar os pares de pontos predefinidos ?
@@ -210,9 +212,18 @@ function insertFunction(n_function){
     return obj;    
 } 
     
+
+document.getElementById("XMAX").addEventListener("change", execGraph); 
+document.getElementById("XMIN").addEventListener("change", execGraph); 
+document.getElementById("YMIN").addEventListener("change", execGraph);  
+document.getElementById("YMAX").addEventListener("change", execGraph);    
+document.getElementById("YMAX").addEventListener("change", execGraph);
+document.getElementById("NSUBSCALE").addEventListener("change", execGraph);  
+
+
 </script>
 
 
-    
+
     
 </html>
